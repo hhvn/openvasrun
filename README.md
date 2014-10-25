@@ -1,7 +1,7 @@
 openvasrpt
 ==========
 
-*** Under development *** Should be up in a few days.
+*** Project on hold as of 10/25/14 *** 
 
 Description
 -----------
