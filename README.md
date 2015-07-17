@@ -1,13 +1,13 @@
 openvasrun
 ==========
 
-*** Project purpose changed 7/17/15 and continuing work on it ***
-
 Description
 -----------
 This Python script creates targets and tasks for each IP address listed in an input file.
+(Tested and working in a simple 40-target environment.)
 
-A future version of it will kick off the tasks up to a maximum number of concurrent runs.
+A future version of it will kick off the tasks up to a maximum number of concurrent runs,
+starting more tasks as others complete.
 
 Features
 --------
