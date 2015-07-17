@@ -1,36 +1,37 @@
 openvasrpt
 ==========
 
-*** Project on hold as of 10/25/14 *** 
+*** Project purpose changed 7/17/15 and continuing work on it ***
 
 Description
 -----------
-This Python script converts Openvas XML full reports into a vulnerability summary report delimited text file. This eases vulnerability analyis during the search for exploits
+This Python script creates targets and tasks for each IP address listed in an input file.
+
+A future version of it will kick off the tasks up to a maximum number of concurrent runs.
 
 Features
 --------
-* This project provides an example of XML file parsing with another Python package I highly recommend called Untangle.
+* This script can load very large numbers of IP addresses for scanning into Openvas.
+* Sorry, but it doesn't yet have the task execution part in it yet.  Hopefully soon!
 
 Usage
 -----
-1. Install untangle, an XML parser for Python.  The package can be found at https://github.com/stchris/untangle .
+1. Place file in any directory.
 
-2. Download the Python script to /tmp.
+2. In the same directory, create a file called target_addresses.txt which should contain a list of IP addresses for which target records and task records are to be created.
 
-3. Make a directory called ov in tmp.
+3. Delete all target records and tasks which may conflict, such as any task or a target with an IP within the target_addresses.txt file.
 
-4. From Openvas, generate one or more XML Full Reports and place all of them in in /tmp/ov .
+4. run this command:   python ./openvasrun.py 
 
-5. Type the following command:   python ovrpts.py
 
-6. The results will exist in ovrpt.py : The results of all XML files will be imported into a delimited text file.
 
 ### Options
 None
 
 Requirements
 ------------
-Linux OS / Python / untangle
+Linux OS / Python / OpenVas
 
 Versions tested:
 
@@ -38,14 +39,15 @@ Linux: 3.14-kali1-686-pae
 
 Python: 2.73
 
-untangle: 1.1.0
+OpenVAS Manager 5.0.2
 
-Untangle's authors are Christian Stefanescu <chris@0chris.com>, and contributions from <flo@terrorpop.de> . I highly recommend it's usage if you intend to parse XML in a Python script but have never done so before.
+OMP Command Line Interface 1.3.0
 
+OpenVAS Scanner 4.0.2
 
 Copyright and license
 ---------------------
-openvasrpt is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+openvasrun is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 openvasrpt is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
 
