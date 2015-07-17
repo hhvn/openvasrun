@@ -12,6 +12,15 @@ A future version of it will kick off the tasks up to a maximum number of concurr
 Features
 --------
 * This script can load very large numbers of IP addresses for scanning into Openvas.
+
+Warning
+--------
+* As is, the code is pretty inflexible.  For example, it currently only runs 'Full and Fast'
+scan configuration.  Feel free to change it as needed.
+* I only tested this on one system against a limited network segment with about 40 targets.
+* It runs in a second or two with 40 targets, but I can't say how performance would be on 
+  1,000+ to tens of thousands hosts.
+* You will see some annoying debug messages.  I'll turn those off eventually.
 * Sorry, but it doesn't yet have the task execution part in it yet.  Hopefully soon!
 
 Usage
