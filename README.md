@@ -1,4 +1,4 @@
-openvasrpt
+openvasrun
 ==========
 
 *** Project purpose changed 7/17/15 and continuing work on it ***
