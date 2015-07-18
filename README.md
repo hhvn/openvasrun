@@ -20,7 +20,7 @@ Features
 Warnings and Caveats
 --------
 * As is, the code is pretty inflexible, meaning I don't have robust error handling, maximum automation, or the use of arguments yet.  For example, it currently only runs 'Full and Fast'
-scan configuration.  Feel free to change it as needed.
+scan configuration.  Feel free to change it in your copy of the source code as needed.
 * Make sure you don't duplicate IP addresses in the file.
 * I only tested this on one system against a limited network segment with about 40 targets.
 
