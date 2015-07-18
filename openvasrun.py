@@ -1,6 +1,9 @@
-#
-#  Working copy:  It works but looks like a mess right now!  I"ll clean up later after I code and test the task 
-#  execution throttling logic.
+import subprocess
+import os
+import time
+import errno
+import array
+import re
 #
 # Author: x1x
 #
@@ -20,32 +23,44 @@
 #
 # Instructions:
 #
+# 0.  Ensure you have Openvas running.  It is necessary to
+#     create a file called omp.config in your home directory
+#     with omp (Openvas Management Service) settings, such as
+#
+#
+# [Connection]
+# host=127.0.0.1
+# port=9390
+# username=uuuuuu
+# password=pppppp
+#
+# where uuuuu is a valid Openvas user (one that can log into
+# Greenbone, for example), and pppppp is it's password).
+# 
+# It is not likely this program will work without that file 
+# set up.
+#
 # 1. Create a directory.
 # 2. Download openvasrun.py to the directory.
 # 3. Create a text file called target_addresses.txt containing
 # the IP addresses to be scanned, one IP per line.  It should 
-# be in the same directory as openvasrun.py.
+# be in the same directory as nmapformat.py.  The IP addresses
+# should be unique.  It is unknown what will occur if there 
+# are duplicates.
 # 4. Ensure the current directory is this newly created 
 # directory by typing pwd.
 # 5. Run the following command: sudo python openvasrun.py .
+#
 #
 # Please email me with recommendations for improvements.  I
 # tailored this program to my specific needs but want to 
 # eventually make it as widely useful as possible.
 #
 # Feel free to modify the source code on your system, such as
-# the ID for the 'Full and Fast' configuration.
+# adding and removing flags from the nmap system call.  
 #
-def process_exists(tst):
-    """Check whether pid exists in the current process table."""
-    retcode = tst.poll()
-    if retcode is None:
-       return True
-    else:
-       return False
 
 def start_process(ip_address):
-
 #
 # The following code creates the target and task records and then kicks off the task for a single IP
 # 
@@ -89,9 +104,11 @@ def start_process(ip_address):
        shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
    lines_iterator = iter(p.stdout.readline, b"")
-   already_exists = 'No'
    for line in lines_iterator:
        print line
+       if line.find('create_task') > 0:
+          task_id = line[26:62]
+          print task_id
 
 # Sample Output:
 # <create_task_response id="4a2a53aa-5a80-4900-8128-cee5be30f44b" status_text="OK, resource created" status="201"></create_task_response>
@@ -99,9 +116,45 @@ def start_process(ip_address):
 #
 # Kick off task here:
 #
+   command_line = " omp --xml=\"<start_task task_id='" + task_id + "'/>\""
+   print command_line
+   p = subprocess.Popen([command_line],
+       shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
-# *&*&*&*& End of task-create-kickoff routine
+   lines_iterator = iter(p.stdout.readline, b"")
+   already_exists = 'No'
+   for line in lines_iterator:
+       print line
 
+#
+# End End End ---->>> start_process <<<-----
+#
+###############################################################
+#
+#
+def get_running_processes():
+#
+# Compute the number of running tasks and the number of tasks 
+# to be started.
+#
+     command_line = "omp --get-tasks"
+     print command_line
+     p = subprocess.Popen([command_line],
+         shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+     lines_iterator = iter(p.stdout.readline, b"")
+     scans_running = 0
+     for line in lines_iterator:
+         print line
+         if line.find('Running') > 0 or line.find('Requested') > 0:
+            scans_running += 1
+     return scans_running
+#
+# End End End ---->>> get_running_processes <<<-----
+#
+###############################################################
+#
+# Begin ---->>> Main program <<<-----
+#
 # The debugf flag essentially displays trace messages to aid in 
 # troubleshooting.  It must be 'yes' to show the messages.
 #
@@ -111,52 +164,30 @@ debugf = 'no'
 # This allows for checking if it is still running. We count the number
 # of processes in the following variable.                                      
 #
-max_processes = 8
-running_processes = 0
-process_array = []
+max_concurrent_scans = 3
 ip_array = []
 
 file = open('target_addresses.txt', 'r')
 
 for line in file:
-   ip_array.append([str(line).rstrip(), "Waiting",0])
-   start_process(str(line).rstrip())
+   ip_array.append([str(line).rstrip()])
 
-print ip_array[0]
+if max_concurrent_scans > len(ip_array):
+   max_concurrent_scans = len(ip_array)
 
-#
-# xxx: The following must be modified to call the opm command with appropriate  parameters.
-# 
-#
-#
-#   p = subprocess.Popen(["nmap", str(line)],
+running_scans = 0
+while running_scans > 0 or len(ip_array) > 0: 
+   if running_scans < max_concurrent_scans:
+      number_to_kickoff = max_concurrent_scans - running_scans
+      print number_to_kickoff
+      for startloop in range(0,number_to_kickoff):
+         ip_address = ip_array[0]
+         print ip_array[0]
+         del ip_array[0]
+         print 'del ip_array[0]'
+         start_process((ip_address)[0])
 
-#   stdout=subprocess.PIPE)
-#   process_array.append(p);
-#   running_processes += 1
-
-#
-# Wait for all nmap processes started above to complete by counting the number of
-# nmap processes which have completed and holding until they reach zero.  The array
-# process_array contains information about all started processes.   
-#
-#sv_running_processes = 0
-                                                                               
-#while running_processes > 0:
-  # Computer the number of processes by looking at all the processes stored in the process_array
-  # structure.  The format of that object is defined in the subprocess module.
-#    running_processes = 0
-#    for s in process_array:    
-#        if process_exists(s):
-#           running_processes = running_processes + 1
-
-#    if sv_running_processes != running_processes:
-  # If the number of running processes has changed, display the value on the screen.
-#       print 'Number of running Processes: '+str(running_processes)
-#       sv_running_processes = running_processes
+   running_scans = get_running_processes()
+   print 'Number of running Processes: '+str(running_scans)
   # Sleep for awhile so as not to waste too much system resources rechecking.
-#    time.sleep(5)
-
-#
-# All scans are now complete and the results are stored as individual files for
-# each IP.  To ease the reformatting process, they will now be recombined.  The resultant                                                                      
+   time.sleep(2)
