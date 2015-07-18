@@ -14,7 +14,7 @@ added as an optional argument.
 
 Features
 --------
-* This script can scan a very large number of IP addresses with Openvas.  No more need to use Greenbone to kick them off one at a time.
+* This script can scan a very large number of IP addresses with Openvas.  No more need to to kick them off one at a time.
 * The number of concurrent scans executed can be set;  the default is 3.
 
 Warnings and Caveats
