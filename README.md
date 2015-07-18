@@ -14,6 +14,7 @@ added as an optional argument.
 Features
 --------
 * This script can load very large numbers of IP addresses for scanning into Openvas.
+* The number of concurrent scans executed can be set;  the default is 3.
 
 Warning
 --------
