@@ -11,17 +11,16 @@ import re
 #
 # Description:  This is a simple program to kick off Openvas
 # scans for each IP address in a particular file.  This script
-# may greatly increase efficiency of penetration testing when
-# very large numbers of hosts are involved.
+# may increase efficiency of penetration testing when very
+# very large numbers of hosts are involved. This script 
+# throttles throughput with a variable called
+# max_concurrent_scans, which specifies the maximum number 
+# of scans to be running at one time.  To change, search the 
+# program for max_concurrent_scans and change the code as 
+# you see fit.
 #
-# A child process will be kicked off for each host being
-# scanned, and they will all run in parallel.  This script is
-# intended to be throttled by a parameter, which specifies
-# the maximum number of scans to be running at one time.
-#
-# At this time, 3 concurrent scans are allowed.  To change,
-# search the program for max_concurrent_scans and change
-# the code as you see fit.
+# (program will be changed in the future to allow an 
+# argument for max_concurrent_scans).
 #
 # Requirements: Linux OS / Python / Openvas
 #
