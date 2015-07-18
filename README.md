@@ -26,6 +26,8 @@ scan configuration.  Feel free to change it as needed.
 
 Usage
 -----
+0. Make sure Openvas is operational.  Set up the omp.config in your home directory.  Be sure to include username and password.
+
 1. Place file in any directory.
 
 2. In the same directory, create a file called target_addresses.txt which should contain a list of IP addresses for which target records and task records are to be created.
