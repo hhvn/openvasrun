@@ -6,8 +6,10 @@ Description
 This Python script creates targets and tasks for each IP address listed in an input file.
 (Tested and working in a simple 40-target environment.)
 
-A future version of it will kick off the tasks up to a maximum number of concurrent runs,
-starting more tasks as others complete.
+The primary benefit is throttling: Openvas tasks up to a maximum number of concurrent runs
+will be started.  As some complete, more will start up to the max_concurrent_scans 
+variable, set to 3 by default.  Edit the program to change it.  In the future, it will be
+added as an optional argument.
 
 Features
 --------
@@ -17,11 +19,10 @@ Warning
 --------
 * As is, the code is pretty inflexible.  For example, it currently only runs 'Full and Fast'
 scan configuration.  Feel free to change it as needed.
+* Make sure you don't duplicate IP addresses in the file.
 * I only tested this on one system against a limited network segment with about 40 targets.
 * It runs in a second or two with 40 targets, but I can't say how performance would be on 
   1,000+ to tens of thousands hosts.
-* You will see some annoying debug messages.  I'll turn those off eventually.
-* Sorry, but it doesn't yet have the task execution part in it yet.  Hopefully soon!
 
 Usage
 -----
@@ -32,8 +33,6 @@ Usage
 3. Delete all target records and tasks which may conflict, such as any task or a target with an IP within the target_addresses.txt file.
 
 4. run this command:   python ./openvasrun.py 
-
-
 
 ### Options
 None
