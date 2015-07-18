@@ -17,14 +17,12 @@ Features
 * This script can load very large numbers of IP addresses for scanning into Openvas.
 * The number of concurrent scans executed can be set;  the default is 3.
 
-Warning
+Warnings and Caveats
 --------
 * As is, the code is pretty inflexible.  For example, it currently only runs 'Full and Fast'
 scan configuration.  Feel free to change it as needed.
 * Make sure you don't duplicate IP addresses in the file.
 * I only tested this on one system against a limited network segment with about 40 targets.
-* It runs in a second or two with 40 targets, but I can't say how performance would be on 
-  1,000+ to tens of thousands hosts.
 
 Usage
 -----
