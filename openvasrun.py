@@ -19,10 +19,14 @@ import re
 # intended to be throttled by a parameter, which specifies
 # the maximum number of scans to be running at one time.
 #
+# At this time, 3 concurrent scans are allowed.  To change,
+# search the program for max_concurrent_scans and change
+# the code as you see fit.
+#
 # Requirements: Linux OS / Python / Openvas
 #
 # Instructions:
-#
+# 
 # 0.  Ensure you have Openvas running.  It is necessary to
 #     create a file called omp.config in your home directory
 #     with omp (Openvas Management Service) settings, such as
@@ -35,7 +39,7 @@ import re
 # password=pppppp
 #
 # where uuuuu is a valid Openvas user (one that can log into
-# Greenbone, for example), and pppppp is it's password).
+# Greenbone, for example), and pppppp is it's password.
 # 
 # It is not likely this program will work without that file 
 # set up.
@@ -50,7 +54,6 @@ import re
 # 4. Ensure the current directory is this newly created 
 # directory by typing pwd.
 # 5. Run the following command: sudo python openvasrun.py .
-#
 #
 # Please email me with recommendations for improvements.  I
 # tailored this program to my specific needs but want to 
@@ -67,7 +70,8 @@ def start_process(ip_address):
 # The test IP address here to be changed to the variable:
 
    command_line = " omp --xml=\"<create_target><name>" + ip_address + "</name><hosts>" + ip_address + "</hosts></create_target>\""
-   print command_line
+   if debugf == 'yes':
+      print command_line
    p = subprocess.Popen([command_line],
        shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
@@ -99,16 +103,19 @@ def start_process(ip_address):
    command_line = " omp --xml=\"<create_task><name>" + ip_address + "</name><config id='daba56c8-73ec-11df-a475-002264764cea'/><target id='" + \
        target_id + "'/></create_task>\""
 
-   print command_line
+   if debugf == 'yes':
+      print command_line
    p = subprocess.Popen([command_line],
        shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
    lines_iterator = iter(p.stdout.readline, b"")
    for line in lines_iterator:
-       print line
+       if debugf == 'yes':
+          print line
        if line.find('create_task') > 0:
           task_id = line[26:62]
-          print task_id
+          if debugf == 'yes':
+             print task_id
 
 # Sample Output:
 # <create_task_response id="4a2a53aa-5a80-4900-8128-cee5be30f44b" status_text="OK, resource created" status="201"></create_task_response>
@@ -117,14 +124,16 @@ def start_process(ip_address):
 # Kick off task here:
 #
    command_line = " omp --xml=\"<start_task task_id='" + task_id + "'/>\""
-   print command_line
+   if debugf == 'yes':
+      print command_line
    p = subprocess.Popen([command_line],
        shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
    lines_iterator = iter(p.stdout.readline, b"")
    already_exists = 'No'
    for line in lines_iterator:
-       print line
+       if debugf == 'yes':
+          print line
 
 #
 # End End End ---->>> start_process <<<-----
@@ -138,13 +147,15 @@ def get_running_processes():
 # to be started.
 #
      command_line = "omp --get-tasks"
-     print command_line
+     if debugf == 'yes':
+        print command_line
      p = subprocess.Popen([command_line],
          shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
      lines_iterator = iter(p.stdout.readline, b"")
      scans_running = 0
      for line in lines_iterator:
-         print line
+         if debugf == 'yes':
+            print line
          if line.find('Running') > 0 or line.find('Requested') > 0:
             scans_running += 1
      return scans_running
@@ -179,15 +190,18 @@ running_scans = 0
 while running_scans > 0 or len(ip_array) > 0: 
    if running_scans < max_concurrent_scans:
       number_to_kickoff = max_concurrent_scans - running_scans
-      print number_to_kickoff
-      for startloop in range(0,number_to_kickoff):
-         ip_address = ip_array[0]
-         print ip_array[0]
-         del ip_array[0]
-         print 'del ip_array[0]'
-         start_process((ip_address)[0])
+      if debugf == 'yes':
+         print number_to_kickoff
+      if len(ip_array) > 0:
+         for startloop in range(0,number_to_kickoff):
+            ip_address = ip_array[0]
+            if debugf == 'yes':
+               print ip_array[0]
+            del ip_array[0]
+            start_process((ip_address)[0])
 
    running_scans = get_running_processes()
    print 'Number of running Processes: '+str(running_scans)
   # Sleep for awhile so as not to waste too much system resources rechecking.
    time.sleep(2)
+print 'All scans complete.'
