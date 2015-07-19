@@ -45,21 +45,11 @@ optional arguments:
 
   -h, --help            show this help message and exit
 
-  -i FILE, --inputfile FILE
+  -i FILE, --inputfile FILE        Input file with IP addresses, one per line. Default name is target_addresses.txt
 
-Input file with IP addresses, one per line. Default
+  -s [SLEEP], --sleep [SLEEP]     Amount of time in seconds to sleep between status checks
 
-name is target_addresses.txt
-
-  -s [SLEEP], --sleep [SLEEP]
-
-Amount of time in seconds to sleep between status
-
-checks
-
-  -c [CONCURRENT], --concurrent [CONCURRENT]
-
-Maximum number of concurrent processes allowed
+  -c [CONCURRENT], --concurrent [CONCURRENT]    Maximum number of concurrent processes allowed
 
   -d, --debug           Show debug messages
 
