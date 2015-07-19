@@ -9,8 +9,7 @@ eventually completing all that have been loaded.
 
 The primary benefit is throttling: Openvas tasks up to a maximum number of concurrent runs
 will be started.  As some complete, more will start up to the max_concurrent_scans 
-variable, set to 3 by default.  Edit the program to change it.  In the future, it will be
-added as an optional argument.
+variable, set to 3 by default. 
 
 Features
 --------
@@ -19,10 +18,16 @@ Features
 
 Warnings and Caveats
 --------
-* As is, the code is pretty inflexible, meaning I don't have robust error handling, maximum automation, or the use of arguments yet.  For example, it currently only runs 'Full and Fast'
-scan configuration.  Feel free to change it in your copy of the source code as needed.
+* I am trying 10 concurrent scans for a total of 40 targets.  My Kali machine is less responsive, I am assuming due to the much higher load on openvas.  I have 2G of memory on it.  CPU isn't even hitting 20%.  Just watch out:  you may run into issues with a higher number of concurrent processes.
+* As is, the code is pretty inflexible, meaning I don't have robust error handling, maximum automation, and it currently only runs 'Full and Fast' scan configuration.  Feel free to change it in your copy of the source code as needed.
 * Make sure you don't duplicate IP addresses in the file.
 * I only tested this on one system against a limited network segment with about 40 targets.
+
+Example
+--------
+The following sleeps for 10 seconds between status checks (-s10) and runs a maximum of 10 concurrent scans (-c10).  In addition, the default file name of target_addresses.txt is read.
+
+ python openvasrun.py -s10 -c10
 
 Usage
 -----
