@@ -18,7 +18,7 @@ Features
 
 Warnings and Caveats
 --------
-* I am trying 10 concurrent scans for a total of 40 targets.  My Kali machine is less responsive, I am assuming due to the much higher load on openvas.  I have 2G of memory on it.  CPU isn't even hitting 20%.  Just watch out:  you may run into issues with a higher number of concurrent processes.
+* Running 10 concurrent scans for a total of 40 targets, my Kali virtual machine is less responsive under this load, I am assuming due to openvas load.  I have 2G of memory on it.  CPU isn't even hitting 20%.  Just watch out:  you may run into issues with a higher number of concurrent processes.
 * As is, the code is pretty inflexible, meaning I don't have robust error handling, maximum automation, and it currently only runs 'Full and Fast' scan configuration.  Feel free to change it in your copy of the source code as needed.
 * Make sure you don't duplicate IP addresses in the file.
 * I only tested this on one system against a limited network segment with about 40 targets.
