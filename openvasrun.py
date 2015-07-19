@@ -212,7 +212,6 @@ ip_array = []
 for line in file:
    ip_array.append([str(line).rstrip()])
 
-print sleep_seconds
 #if debugf == 'yes':
 #   print ip_array
 
@@ -234,7 +233,7 @@ while running_scans > 0 or len(ip_array) > 0:
             start_process((ip_address)[0])
 
    running_scans = get_running_processes()
-   print 'Running Processes: '+str(running_scans)
+   print 'Running scans: '+str(running_scans)
   # Sleep for awhile so as not to waste too much system resources rechecking.
    time.sleep(sleep_seconds)
 print 'All scans complete.'
