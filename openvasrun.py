@@ -17,14 +17,12 @@ import re
 # may greatly increase efficiency of penetration testing when
 # very large numbers of hosts are involved.
 #
-# A child process will be kicked off for each host being
-# scanned, and they will all run in parallel.  This script is
-# intended to be throttled by a parameter, which specifies
-# the maximum number of scans to be running at one time.
+# At this time, 3 concurrent scans are allowed by default. 
+# Use an argument to change the concurrency setting.
 #
-# At this time, 3 concurrent scans are allowed.  To change,
-# search the program for max_concurrent_scans and change
-# the code as you see fit.
+# Type the following to see command line option:
+# 
+# python openvasrun.py -h 
 #
 # Requirements: Linux OS / Python / Openvas
 #
@@ -79,7 +77,7 @@ def start_process(ip_address):
 # 
 # The test IP address here to be changed to the variable:
 
-   command_line = " omp --xml=\"<create_target><name>" + ip_address + "</name><hosts>" + ip_address + "</hosts></create_target>\""
+   command_line = " omp --xml=\"<create_target><name>" + ip_address + "</name><hosts>" + ip_address + "</hosts><alive_tests>Consider Alive</alive_tests></create_target>\""
    if debugf == 'yes':
       print command_line
    p = subprocess.Popen([command_line],
