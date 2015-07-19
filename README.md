@@ -3,13 +3,9 @@ openvasrun
 
 Description
 -----------
-This Python script creates targets and tasks for each IP address listed in an input file.
-(Tested and working in a simple 40-target environment.)  It then kicks off tasks, 
-eventually completing all that have been loaded.
+This Python script creates Openvas targets and tasks for each IP address listed in an input file. (Tested and working in a simple 40-target environment.)  It then kicks off tasks, eventually completing all that have been loaded.
 
-The primary benefit is throttling: Openvas tasks up to a maximum number of concurrent runs
-will be started.  As some complete, more will start up to the max_concurrent_scans 
-variable, set to 3 by default. 
+The primary benefit is throttling: Openvas tasks up to a maximum number of concurrent runs will be started.  As some complete, more will start up to the max_concurrent_scans variable, set to 3 by default. 
 
 Features
 --------
