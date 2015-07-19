@@ -42,15 +42,25 @@ python openvasrun.py -h
 usage: openvasrun.py [-h] [-i FILE] [-s [SLEEP]] [-c [CONCURRENT]] [-d]
 
 optional arguments:
+
   -h, --help            show this help message and exit
+
   -i FILE, --inputfile FILE
-                        Input file with IP addresses, one per line. Default
-                        name is target_addresses.txt
+
+Input file with IP addresses, one per line. Default
+
+name is target_addresses.txt
+
   -s [SLEEP], --sleep [SLEEP]
-                        Amount of time in seconds to sleep between status
-                        checks
+
+Amount of time in seconds to sleep between status
+
+checks
+
   -c [CONCURRENT], --concurrent [CONCURRENT]
-                        Maximum number of concurrent processes allowed
+
+Maximum number of concurrent processes allowed
+
   -d, --debug           Show debug messages
 
 
