@@ -1,26 +1,30 @@
+import os.path
+import argparse
 import subprocess
+import sys
 import os
 import time
 import errno
 import array
 import re
 #
-# Author: x1x
+# Author: Andy Marks
 #
-# Date: 07/17/15
+# Date: 07/19/15
 #
 # Description:  This is a simple program to kick off Openvas
 # scans for each IP address in a particular file.  This script
-# may increase efficiency of penetration testing when very
-# very large numbers of hosts are involved. This script 
-# throttles throughput with a variable called
-# max_concurrent_scans, which specifies the maximum number 
-# of scans to be running at one time.  To change, search the 
-# program for max_concurrent_scans and change the code as 
-# you see fit.
+# may greatly increase efficiency of penetration testing when
+# very large numbers of hosts are involved.
 #
-# (program will be changed in the future to allow an 
-# argument for max_concurrent_scans).
+# A child process will be kicked off for each host being
+# scanned, and they will all run in parallel.  This script is
+# intended to be throttled by a parameter, which specifies
+# the maximum number of scans to be running at one time.
+#
+# At this time, 3 concurrent scans are allowed.  To change,
+# search the program for max_concurrent_scans and change
+# the code as you see fit.
 #
 # Requirements: Linux OS / Python / Openvas
 #
@@ -61,6 +65,13 @@ import re
 # Feel free to modify the source code on your system, such as
 # adding and removing flags from the nmap system call.  
 #
+
+
+def is_valid_file(parser, arg):
+    if not os.path.exists(arg):
+        parser.error("The file %s does not exist!" % arg)
+    else:
+        return open(arg, 'r')  # return an open file handle
 
 def start_process(ip_address):
 #
@@ -168,19 +179,44 @@ def get_running_processes():
 # The debugf flag essentially displays trace messages to aid in 
 # troubleshooting.  It must be 'yes' to show the messages.
 #
-debugf = 'no'
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--inputfile", dest="filename", # required=True,
+                    help="Input file with IP addresses, one per line. Default name is target_addresses.txt", 
+                    metavar="FILE",
+                    type=lambda x: is_valid_file(parser, x), default='target_addresses.txt')
+parser.add_argument("-s", "--sleep", help="Amount of time in seconds to sleep between status checks", 
+                    nargs='?', const=10, type=int, default=10)
+parser.add_argument("-c", "--concurrent", help="Maximum number of concurrent processes allowed", 
+                    nargs='?', const=3, type=int, default=3)
+parser.add_argument("-d", "--debug", help="Show debug messages",action="store_true")
+args = parser.parse_args()
+
+max_concurrent_scans = args.concurrent
+sleep_seconds = args.sleep
+file = args.filename
+if args.debug:
+   debugf = 'yes'
+else:
+   debugf = 'no'
+if debugf == 'yes':
+   print 'File: '+str(args.filename)
+   print 'Print debug messages: '+debugf
+   print 'Sleep '+str(sleep_seconds)+' seconds between status checks.'
+   print 'Maximum concurrent scans: '+str(max_concurrent_scans)
 
 # All processes are stored in process_array just after they are started.
 # This allows for checking if it is still running. We count the number
 # of processes in the following variable.                                      
 #
-max_concurrent_scans = 3
-ip_array = []
 
-file = open('target_addresses.txt', 'r')
+ip_array = []
 
 for line in file:
    ip_array.append([str(line).rstrip()])
+
+print sleep_seconds
+#if debugf == 'yes':
+#   print ip_array
 
 if max_concurrent_scans > len(ip_array):
    max_concurrent_scans = len(ip_array)
@@ -200,7 +236,7 @@ while running_scans > 0 or len(ip_array) > 0:
             start_process((ip_address)[0])
 
    running_scans = get_running_processes()
-   print 'Number of running Processes: '+str(running_scans)
+   print 'Running Processes: '+str(running_scans)
   # Sleep for awhile so as not to waste too much system resources rechecking.
-   time.sleep(2)
+   time.sleep(sleep_seconds)
 print 'All scans complete.'
