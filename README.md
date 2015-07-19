@@ -28,16 +28,31 @@ Usage
 -----
 0. Make sure Openvas is operational.  Set up the omp.config in your home directory.  Be sure to include username and password.
 
-1. Place file in any directory.
+1. Place the openvasrun.py file in any directory.
 
-2. In the same directory, create a file called target_addresses.txt which should contain a list of IP addresses for which target records and task records are to be created.
+2. In the same directory, create a file called target_addresses.txt (default name) which should contain a list of IP addresses for which target records and task records are to be created.
 
 3. Delete all target records and tasks which may conflict, such as any task or a target with an IP within the target_addresses.txt file.
 
 4. run this command:   python ./openvasrun.py 
 
 ### Options
-None
+
+python openvasrun.py -h
+usage: openvasrun.py [-h] [-i FILE] [-s [SLEEP]] [-c [CONCURRENT]] [-d]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i FILE, --inputfile FILE
+                        Input file with IP addresses, one per line. Default
+                        name is target_addresses.txt
+  -s [SLEEP], --sleep [SLEEP]
+                        Amount of time in seconds to sleep between status
+                        checks
+  -c [CONCURRENT], --concurrent [CONCURRENT]
+                        Maximum number of concurrent processes allowed
+  -d, --debug           Show debug messages
+
 
 Requirements
 ------------
