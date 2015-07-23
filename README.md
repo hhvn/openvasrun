@@ -71,6 +71,11 @@ OMP Command Line Interface 1.3.0
 
 OpenVAS Scanner 4.0.2
 
+
+Thanks
+------------
+Thanks to the developers, maintainers and benefactors of Openvas (http://www.openvas.org/), Python(https://www.python.org/), Debian (https://www.debian.org/) and Kali(https://www.kali.org/). Love your software! 
+
 Copyright and license
 ---------------------
 openvasrun is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
